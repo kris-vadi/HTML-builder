@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { writeFile } = require('fs/promises');
 const fsPromises = fs.promises;
 const path = require('path');
 const { Transform, pipeline } = require('stream');
@@ -60,29 +61,32 @@ const buildHtml = (fromDir, toDir) => {
 
   const transform = new Transform({
     transform(chunk, enc, cb) {
-      const chunkStringified = chunk.toString();
+      let chunkStringified = chunk.toString();
 
-      // const matches = [...chunkStringified.matchAll(new RegExp('\{\{[a-z]*?\}\}', 'g'))];
+      fs.readdir(componentsDir, (err, files) => {
+        if (err) throw err;
 
-      // matches.forEach((match) => {
-      //   console.log(match[0]);
+        files.forEach((file) => {   
+          const componentHtml = fs.createReadStream(path.join(componentsDir, file), {encoding: 'utf8'});
+          let components = [];
 
-      //   chunkStringified.
-      // })
+          componentHtml.on('data', (component) => {
+            const name = file.replace(path.extname(file), '');
+            components.push({'name': name, 'text': component});
+            for(let component of components) {
+              chunkStringified = chunkStringified.replace(`{{${component.name}}}`, component.text);
+            }
+            writeFile(path.join(toDir, 'index.html'), chunkStringified);
+          })
+        })
+      })
 
       this.push(chunkStringified);
       cb();
     }
   });
 
-  pipeline(
-    readableStream,
-    transform,
-    writeableStream,
-    (err) => {
-      throw err;
-    }
-  );
+  readableStream.pipe(transform).pipe(writeableStream).on('error', (err) => console.log(`Error: ${err}`));
 }
 
 const createProjectDist = (newDist) => {
