@@ -7,7 +7,7 @@ const newDir = path.join(__dirname, 'files-copy');
 
 fsPromises.mkdir(newDir, { recursive: true }).then(
 
-  fs.readdir(src,  {withFileTypes: true}, (err, files) => {
+  fs.readdir(src, {withFileTypes: true}, (err, files) => {
     if (err) throw err;
 
     files.forEach((file) => {
