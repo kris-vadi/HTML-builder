@@ -7,13 +7,13 @@ const writeableStream =fs.createWriteStream(path.resolve(__dirname, 'text.txt'),
 
 readFromTerminal.pipe(writeableStream);
 
-writeInTerminal.write('Enter text below:\n')
+console.log('Enter text below:\n');
 
 readFromTerminal.on('data', (chunk) => {
   const chunkStringified = chunk.toString();
 
   if (chunkStringified.match('exit')) {
     readFromTerminal.unpipe(writeableStream);
-    writeInTerminal.write('Have a nice day!');
+    console.log('Have a nice day!');
   }
 })
