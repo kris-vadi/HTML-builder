@@ -3,7 +3,7 @@ const path = require('path');
 
 const readFromTerminal = process.stdin;
 const writeInTerminal = process.stdout;
-const writeableStream =fs.createWriteStream(path.resolve(__dirname, 'text.txt'), 'utf-8');
+const writeableStream = fs.createWriteStream(path.resolve(__dirname, 'text.txt'), 'utf-8');
 
 readFromTerminal.pipe(writeableStream);
 
