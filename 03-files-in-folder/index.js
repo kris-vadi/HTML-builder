@@ -14,6 +14,7 @@ fs.readdir(dirPath, {withFileTypes: true}, (err, content) => {
 
     
     const size = fs.stat(filePath, (err, stats) => { 
+      if (err) throw err;
       console.log(`${name} - ${extention} - ${stats.size}b`);
     })
   })
