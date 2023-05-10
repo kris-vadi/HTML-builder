@@ -17,3 +17,8 @@ readFromTerminal.on('data', (chunk) => {
     console.log('Have a nice day!');
   }
 })
+
+process.on('SIGINT', () => {
+  readFromTerminal.unpipe(writeableStream);
+  console.log('Have a nice day!');
+})
