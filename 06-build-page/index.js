@@ -43,7 +43,7 @@ const mergeStyles = (fromDir, toDir) => {
     if (err) throw err;
 
     files.forEach((file) => {
-      if (file.isFile() && path.extname(file.name) === '.css') {
+      if (file.isFile && path.extname(file.name) === '.css') {
         const readableStream = fs.createReadStream(path.join(fromDir, file.name));
 
         readableStream.pipe(writableStream).on('error', (err) => console.log(`Error: ${err}`));
@@ -103,3 +103,5 @@ fsPromises.mkdir(newProjectDist, { recursive: true }).then(
 ).catch(function() {
   console.log('failed to create directory');
 });
+
+

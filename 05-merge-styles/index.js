@@ -10,7 +10,7 @@ fs.readdir(src, {withFileTypes: true}, (err, files) => {
   if (err) throw err;
 
   files.forEach((file) => {
-    if (file.isFile() && path.extname(file.name) === '.css') {
+    if (file.isFile && path.extname(file.name) === '.css') {
       const readableStream = fs.createReadStream(path.join(src, file.name));
 
       readableStream.pipe(writableStream).on('error', (error) => console.log(error.message));
